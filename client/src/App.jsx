@@ -4,8 +4,8 @@ import { supabase } from './supabaseClient'
 function App() {
   useEffect(() => {
     async function testConnection() {
-      const { data, error } = await supabase.from('todos').select('*')
-      
+      const { data, error } = await supabase.from('bugs').select('*')
+
       if (error) {
         console.log('Supabase response/error:', error.message)
       } else {
