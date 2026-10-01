@@ -1,54 +1,29 @@
-const frontURL = "http://localhost:3000";
+const API_BASE_URL = "http://localhost:3000/api/items";
 
-console.log("FRONT URL:", frontURL);
-console.log("API URL:", `${frontURL}/api/items`);
+export async function getAllItems() {
+  const res = await fetch(API_BASE_URL);
+  if (!res.ok) throw new Error("Failed to fetch bugs");
+  return await res.json();
+}
 
-export const getAllItems = async () => {
-    const url = `http://localhost:3000/api/items`;
+export async function addItem(bug) {
+  const res = await fetch(API_BASE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(bug),
+  });
+  if (!res.ok) throw new Error("Failed to add bug");
+  return await res.json();
+}
 
-    const response = await fetch(url);
+export async function deleteItem(id) {
+  const response = await fetch(`http://localhost:3000/api/items/${id}`, {
+    method: "DELETE",
+  });
 
-    if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-    }
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`);
+  }
 
-    return await response.json();
-
-
-};
-
-
-export const addItem = async (payload) => {
-    const url = `http://localhost:3000/api/items`;
-
-    const response = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-    }
-
-    return await response.json();
-
-
-};
-
-export const deleteItem = async (id) => {
-    const url = `${frontURL}/api/items / ${id}`;
-
-    const response = await fetch(url, {
-        method: "DELETE",
-    });
-
-    if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-    }
-
-    return await response.json();
-
-};
+  return await response.json();
+}
