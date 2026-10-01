@@ -1,7 +1,7 @@
 const frontURL = process.env.VITE_FRONT_URL
 
 const getAllItems = async () => {
-    const url = `${frontURL}/items`
+    const url = `${frontURL}/api/items`
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -16,7 +16,7 @@ const getAllItems = async () => {
 }
 
 const addItem = async (payload) => {
-    const url = `${frontURL}/items`
+    const url = `${frontURL}/api/items`
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -37,7 +37,7 @@ const addItem = async (payload) => {
 }
 
 const deleteItem = async (id) => {
-    const url = `${frontURL}/items/:id`
+    const url = `${frontURL}/api/items/:id`
     try {
         const response = await fetch(url, {
             method: "DELETE",
