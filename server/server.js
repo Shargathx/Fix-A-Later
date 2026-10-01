@@ -43,7 +43,7 @@ app.post('/api/items', async (req, res) => {
 
 })
 
-app.delete('/api/items/:id', (req, res) => {
+app.delete('/api/items/:id', async (req, res) => {
     const payload = req.body
     const id = req.params
 

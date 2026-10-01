@@ -39,7 +39,7 @@ const addItem = async (payload) => {
 const deleteItem = async (id) => {
     const url = `${frontURL}/api/items/:id`
     try {
-        const response = await fetch(url, {
+        const response = fetch(url, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
