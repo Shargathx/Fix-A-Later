@@ -43,7 +43,21 @@ app.post('/api/items', async (req, res) => {
 
 })
 
-app.delete('/api/items/:id', (req, res) => { })
+app.delete('/api/items/:id', (req, res) => {
+    const payload = req.body
+    const id = req.params
+
+    const { data, error } = await supabase
+        .from('bugs')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.log("Error")
+    }
+
+    res.status(201).json(data);
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
