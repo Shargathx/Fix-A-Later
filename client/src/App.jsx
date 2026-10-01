@@ -1,39 +1,66 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextField, Button, Select, MenuItem } from "@mui/material";
-import "./App.css";
 import BugList from "./components/bugList.jsx";
+
+import { getAllItems, addItem, deleteItem } from "../../server/app.js";
 
 function App() {
   const [title, titleSet] = useState("");
   const [priority, setPriority] = useState("medium");
-  const [bugs, setBugs] = useState([
-    {
-      id: 1,
-      title: "Button does not work",
-      priority: "high",
-    },
-    {
-      id: 2,
-      title: "Page loads slowly",
-      priority: "medium",
-    },
-  ]);
+  const [bugs, setBugs] = useState([]);
 
-  function handleSubmit(event) {
+  useEffect(() => {
+    const loadBugs = async () => {
+      try {
+        const data = await getAllItems();
+        setBugs(data);
+      } catch (error) {
+        console.error("Failed to load bugs:", error);
+      }
+    };
+
+    loadBugs();
+
+
+  }, []);
+
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const bug = {
-      id: Date.now(),
       title,
       priority,
     };
 
-    setBugs([...bugs, bug]);
-    console.log(bug);
+    try {
+      const createdBug = await addItem(bug);
+
+      setBugs((currentBugs) => [
+        ...currentBugs,
+        ...createdBug,
+      ]);
+
+      titleSet("");
+      setPriority("medium");
+    } catch (error) {
+      console.error("Failed to add bug:", error);
+    }
+
+
   }
 
-  function deleteBug(bugId) {
-    setBugs(bugs.filter((bug) => bug.id !== bugId));
+  async function deleteBug(bugId) {
+    try {
+      await deleteItem(bugId);
+
+      setBugs((currentBugs) =>
+        currentBugs.filter((bug) => bug.id !== bugId)
+      );
+    } catch (error) {
+      console.error("Failed to delete bug:", error);
+    }
+
+
   }
 
   return (
@@ -43,9 +70,11 @@ function App() {
           label="Bug Title"
           value={title}
           onChange={(event) => titleSet(event.target.value)}
-          inputProps={{
-            minLength: 1,
-            maxLength: 100,
+          slotProps={{
+            htmlInput: {
+              minLength: 1,
+              maxLength: 100,
+            },
           }}
           required
         />
@@ -64,8 +93,13 @@ function App() {
         </Button>
       </form>
 
-      <BugList bugs={bugs} onDelete={deleteBug} />
+      <BugList
+        bugs={bugs}
+        onDelete={deleteBug}
+      />
     </main>
+
+
   );
 }
 

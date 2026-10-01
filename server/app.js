@@ -1,58 +1,54 @@
-const frontURL = process.env.VITE_FRONT_URL
+const frontURL = "http://localhost:3000";
 
-const getAllItems = async () => {
-    const url = `${frontURL}/api/items`
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
+console.log("FRONT URL:", frontURL);
+console.log("API URL:", `${frontURL}/api/items`);
 
-        const result = await response.json();
-        console.log(result);
-    } catch (error) {
-        console.error(error.message);
+export const getAllItems = async () => {
+    const url = `http://localhost:3000/api/items`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
     }
-}
 
-const addItem = async (payload) => {
-    const url = `${frontURL}/api/items`
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: JSON.stringify({ payload }),
-        });
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
+    return await response.json();
 
-        const result = await response.json();
-        console.log(result);
-    } catch (error) {
-        console.error(error.message);
+
+};
+
+
+export const addItem = async (payload) => {
+    const url = `http://localhost:3000/api/items`;
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
     }
-}
 
-const deleteItem = async (id) => {
-    const url = `${frontURL}/api/items/:id`
-    try {
-        const response = fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: JSON.stringify({ payload }),
-        });
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
+    return await response.json();
 
-        const result = await response.json();
-        console.log(result);
-    } catch (error) {
-        console.error(error.message);
+
+};
+
+export const deleteItem = async (id) => {
+    const url = `${frontURL}/api/items / ${id}`;
+
+    const response = await fetch(url, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
     }
-}
+
+    return await response.json();
+
+};
